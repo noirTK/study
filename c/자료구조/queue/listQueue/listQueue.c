@@ -2,24 +2,24 @@
 
 void init(listQueue* q)
 {
-    q->front = q->roar = 0;
+    q->front = q->rear = 0;
 }
 
 int empty(const listQueue* q)
 {
-    return q->front == q->roar;
+    return q->front == q->rear;
 }
 
 int full(const listQueue* q)
 {
-    return q->front == (q->roar+1)%MAX_INDEX;
+    return q->front == (q->rear+1)%MAX_INDEX;
 }
 
 int size(const listQueue* q)
 {
     int size = 0;
     int t = (q->front)%MAX_INDEX;
-    while(t != q->roar)
+    while(t != q->rear)
     {
         ++size;
         t = (t+1) % MAX_INDEX;
@@ -34,8 +34,8 @@ void push(listQueue* q, element item)
         fprintf(stderr, "큐가 포화상태입니다. \n");
         exit(1);
     }
-    q->roar = (q->roar+1)%MAX_INDEX;
-    q->data[q->roar] = item;
+    q->rear = (q->rear+1)%MAX_INDEX;
+    q->data[q->rear] = item;
 }
 
 element pop(listQueue* q)
@@ -66,5 +66,5 @@ element back(const listQueue* q)
         fprintf(stderr, "큐가 비어있습니다. \n");
         exit(1);
     }
-    return q->data[q->roar];
+    return q->data[q->rear];
 }
