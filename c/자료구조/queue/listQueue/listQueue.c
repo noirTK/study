@@ -1,13 +1,4 @@
-#include <stdio.h>
-
-#define MAX_INDEX 5
-typedef int element;
-
-typedef struct
-{
-    int front, roar;
-    element data[MAX_INDEX];
-}listQueue;
+#include "listQueue.h"
 
 void init(listQueue* q)
 {
@@ -30,7 +21,6 @@ int size(const listQueue* q)
     int t = (q->front)%MAX_INDEX;
     while(t != q->roar)
     {
-
         ++size;
         t = (t+1) % MAX_INDEX;
     }
@@ -77,24 +67,4 @@ element back(const listQueue* q)
         exit(1);
     }
     return q->data[q->roar];
-}
-
-
-int main()
-{
-    listQueue* q = (listQueue*)malloc(sizeof(listQueue));
-    init(q);
-    printf("큐는 비어있는가? [비어있음 : %d], [포화상태 : %d] 사이즈 : %d.\n", empty(q), full(q), size(q));
-    push(q,1);
-    printf("큐 값 : %d\n", front(q));
-    push(q,2);
-    printf("큐 맨 끝 값 : %d\n", back(q));
-    push(q,3);
-    printf("큐 맨 끝 값 : %d\n", back(q));
-    push(q,4);
-    printf("큐 맨 끝 값 : %d\n", back(q));
-    printf("큐는 비어있는가? [비어있음 : %d], [포화상태 : %d] 사이즈 : %d.\n", empty(q), full(q), size(q));
-    printf("%d, %d, %d, %d\n", pop(q), pop(q), pop(q), pop(q));
-    printf("큐는 비어있는가? [비어있음 : %d], [포화상태 : %d] 사이즈 : %d.\n", empty(q), full(q), size(q));
-    printf("end\n");
 }
