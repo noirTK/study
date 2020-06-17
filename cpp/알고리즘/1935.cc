@@ -20,7 +20,6 @@ double operate(const double& L, const double& R, const char& op)
     }
 }
 
-
 int main()
 {
     int times;
