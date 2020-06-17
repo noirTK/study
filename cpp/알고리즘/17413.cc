@@ -13,7 +13,6 @@ int main()
     bool found = false;
     for(char ch : line)
     {
-        
         if(ch == '<')
         {
             if(!s.empty())
