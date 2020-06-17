@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cstring>
 
 using namespace std;
 int main()
@@ -7,26 +8,19 @@ int main()
     string input;
     cin >> input;
     int len = input.length();
-    string* rows = new string[len];
-    for(int i = 0; i < len; ++i)
-    {
-        rows[i] = input.substr(i,len-i);
-    }
+    int* rows = new int[len];
+    for(int i = 0; i < len; ++i) rows[i] = i;
 
     for(int i = 0; i < len; ++i)
     {
-        for(int j=0; j<i; ++j)
+        for(int j = 0; j < i; ++j)
         {
-            if(rows[i] < rows[j])
-            {
-                swap(rows[j],rows[i]);
-            }
+            if(strcmp(input.c_str()+rows[i],input.c_str()+rows[j]) < 0)
+                swap(rows[i],rows[j]);
         }
     }
-    for(int i = 0; i < len; ++i)
-    {
-        cout << rows[i] << '\n';
-    }
+    for(int i = 0; i < len; ++i) cout << input.substr(rows[i]) << '\n';
+    
     delete [] rows;
     return 0;
 }
