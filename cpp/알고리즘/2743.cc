@@ -1,12 +1,13 @@
 #include <iostream>
-#include <cstdio>
+#include <string>
 
 using namespace std;
 int main()
 {
-    char ch;
+    string input;
     int len = 0;
-    while((ch = getchar())!='\n') ++len;
+    cin >> input;
+    for(int i = 0; input[i]; ++i) len++;
     cout << len << '\n';
     return 0;
 }
