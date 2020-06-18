@@ -1,36 +1,31 @@
 #include <iostream>
-#include <array>
 
 using namespace std;
 
-void findPrime(array<bool,1001>* const nums)
+bool isPrime(int num)
 {
-    nums->fill(true);
-    nums->at(0) = nums->at(1) = false;
-    for(int i = 2; i < nums->size(); ++i)
+    if(num < 2) return false;
+    for(int i = 2; i*i <= num; ++i)
     {
-        if((*nums)[i] == true)
+        if(num % i == 0)
         {
-            for(int j = i*i; j < nums->size(); j+=i) nums->at(j) = false;
+            return false;
         }
-        
     }
-
+    return true;
 }
+
 int main()
 {
-    array<bool,1001>* nums = new array<bool,1001>;
-    findPrime(nums);
     int times;
     cin >> times;
-    int primeNum = 0;
+    int primes = 0;
     while(times--)
     {
         int num;
         cin >> num;
-        if(nums->at(num)) ++primeNum;
+        if(isPrime(num)) ++primes;
     }
-    cout << primeNum << '\n';
-    delete nums;
+    cout << primes << '\n';
     return 0;
 }
