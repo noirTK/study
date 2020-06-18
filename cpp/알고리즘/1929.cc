@@ -25,5 +25,6 @@ int main()
     {
         if(nums->at(it) == true) cout << it << '\n';
     }
+    delete nums;
     return 0;
 }
