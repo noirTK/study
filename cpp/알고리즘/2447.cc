@@ -2,36 +2,26 @@
 #include <array>
 
 using namespace std;
-array<array<char,2187>,2187>space;
-void star(int y, int x, int length, char fill)
+array<array<char, 2187>, 2187> space;
+
+void star(const int y, const int x, const int len, const char ch)
 {
-    if(length == 3)
+    if(len == 3)
     {
-        for(int i = 0; i < 3; ++i)
-        {
-            space[y][x+i] = fill;
-        }
-        space[y+1][x] = fill;
+        for(int i = 0; i < 3; ++i) space[y][x+i] = ch;
+        space[y+1][x] = ch;
         space[y+1][x+1] = ' ';
-        space[y+1][x+2] = fill;
-        for(int i = 0; i < 3; ++i)
-        {
-            space[y+2][x+i] = fill;
-        }
+        space[y+1][x+2] = ch;
+        for(int i = 0; i < 3; ++i) space[y+2][x+i] = ch;
         return;
     }
-    for(int i = 0; i < length; i+= length/3)
+    for(int i = 0; i < len; i += len/3)
     {
-        star(y , x+i ,length/3, fill);
-    }
-
-    star(y+length/3, x, length/3, fill);
-    star(y+length/3, x + length/3, length/3, ' ');
-    star(y+length/3, x + length/3*2, length/3, fill);
-
-    for(int i = 0; i < length; i+= length/3)
-    {
-        star(y + length/3*2 , x+i ,length/3, fill);
+        for(int j = 0; j < len; j += len/3)
+        {
+            if(j == len/3 && i >= len/3 && i < len/3*2) star(y + i, x + j, len/3, ' ');
+            else star(y + i, x + j, len/3, ch);
+        }
     }
 }
 int main()
@@ -39,12 +29,9 @@ int main()
     int n;
     cin >> n;
     star(0,0,n,'*');
-    for(int y = 0; y < n; ++y)
+    for(int i = 0; i < n; ++i)
     {
-        for(int x = 0; x < n; ++x)
-        {
-            cout << space[y][x];
-        }
+        for(int j = 0; j < n; ++j) cout << space[i][j];
         cout << '\n';
     }
     return 0;
