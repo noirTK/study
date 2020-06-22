@@ -18,21 +18,14 @@ int main()
     {
         for(int j = 0; j < 10; ++j)
         {
-            if(j == 0) d[i][j] = d[i-1][j+1];
-            else if(j == 9) d[i][j] = d[i-1][j-1];
-            else
-            {
-                d[i][j] = d[i-1][j-1] + d[i-1][j+1];
-                d[i][j] %= mod;
-            }
+            d[i][j] = 0;
+            if(j - 1 >= 0) d[i][j] += d[i-1][j-1];
+            if(j + 1 <= 9) d[i][j] += d[i-1][j+1];
+            d[i][j] %= mod;
         }
     }
     long long ans = 0;
-    for(int i = 0; i < 10; ++i)
-    {
-        ans += d[n][i];
-    }
-
+    for(int i = 0; i < 10; ++i) ans += d[n][i];
     cout << ans % mod << '\n';
     return 0;
 }
