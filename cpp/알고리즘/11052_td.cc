@@ -8,12 +8,9 @@ int sol(const int n)
 {
     if(n == 0 ) return 0;
     if(d[n] > 0) return d[n];
-    for(int i = 1; i <= n; ++i)
+    for(int j = 1; j <= n; ++j)
     {
-        for(int j = 1; j <= i; ++j)
-        {
-            d[i] = max(d[i],sol(i-j) + p[j]);
-        }
+        d[n] = max(d[n],sol(n-j) + p[j]);
     }
     return d[n];
 }
