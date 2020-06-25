@@ -26,7 +26,7 @@ int main()
         cin >> t;
         p[i] = t;
     }
-    sol(n);
+    for(int i = 1; i <= n; ++i) sol(i);
     cout << *max_element(d.begin(),d.end()) << '\n';
     return 0;
 }
