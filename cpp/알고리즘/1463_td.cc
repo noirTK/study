@@ -2,7 +2,7 @@
 https://www.acmicpc.net/problem/1463
 1463 다이나믹 문제풀이 - TopDown
 D[n] = 정수 n에 대해 1로 만드는 연산 횟수의 최솟값
-D[n] = min(d[n/3]+1, d[n/2]+1, d[n-1]+1)
+sol(n) = min(sol(n-1)+1, sol(n/3)+1, sol(n/2)+1)
 d[1] = 0
 */
 
