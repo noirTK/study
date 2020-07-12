@@ -47,6 +47,10 @@
     void showPercent() const; summonPickServent를  만족하는 10~99% 각 확률당 필요한 성정석 개수를 확인할 수 있다. (summonPickServent 호출 후 사용)
 
     void show() const; C11summon/C11summonPickServent/summon/summonPickServent의 평균 결과를 보여줌. tot에서 times 나눈 것.
+
+    void setPU(const int rank = 5, const int choice = 1); 픽업 대상이 더블이거나 단독일 경우 픽업 확률이 자동 조절된다.
+    -> 단독 5성 픽업 : 0.7 / 더블 5성 픽업 : 0.8
+    -> 단독 4성 픽업 : 1.5 / 더블 4성 픽업 : 2.4
 */
 
 #ifndef _fgo_simulator_H_
@@ -70,30 +74,32 @@ class fgo_simulator
     ullp totLS5, totLS4, totLS3, totLCE5, totLCE4, totLCE3;
     ullp memory;
 
-    const double S5PU = 1;
-    const double S4PU = 3;
-    const double S3PU = 40;
-    const double CE5PU = 4;
-    const double CE4PU = 12;
-    const double CE3PU = 40;
+    double S5PU = 1;
+    double S4PU = 3;
+    double S3PU = 40;
+    double CE5PU = 4;
+    double CE4PU = 12;
+    double CE3PU = 40;
 
-    const double LS5PU = 0.8;
-    const double LS4PU = 1.5;
-    const double LS3PU = 4;
-    const double LCE5PU = 3.6;
-    const double LCE4PU = 10;
-    const double LCE3PU = 36;
+    double LS5PU = 0.7;
+    double LS4PU = 1.5;
+    double LS3PU = 4;
+    double LCE5PU = 2.8;
+    double LCE4PU = 4;
+    double LCE3PU = 8;
 
     public:
     fgo_simulator(unsigned long long times = 1000000, unsigned int LS5 = 1, unsigned int LS4 = 1, unsigned int LS3 = 1, unsigned int LCE5 = 1, unsigned int LCE4 = 1, unsigned int LCE3 = 1) : times(times), LS5(LS5), LS4(LS4), LS3(LS3), LCE5(LCE5), LCE4(LCE4), LCE3(LCE3)
     {
-        totLS5 = new unsigned long long[LS5];
-        totLS4 = new unsigned long long[LS4];
-        totLS3 = new unsigned long long[LS3];
-        totLCE5 = new unsigned long long[LCE5];
-        totLCE4 = new unsigned long long[LCE4];
-        totLCE3 = new unsigned long long[LCE3];
-        memory = new unsigned long long[100000];
+        setPU(5, LS5);
+        setPU(4, LS4);
+        totLS5 = new ull[LS5];
+        totLS4 = new ull[LS4];
+        totLS3 = new ull[LS3];
+        totLCE5 = new ull[LCE5];
+        totLCE4 = new ull[LCE4];
+        totLCE3 = new ull[LCE3];
+        memory = new ull[100000];
     };
     ~fgo_simulator()
     {
@@ -104,8 +110,9 @@ class fgo_simulator
         delete [] totLCE3;
         delete [] memory;
     }
+    void setPU(const int rank = 5, const int choice = 1);
     
-    void C11summon(unsigned long long stones = S11_NEED_STONE);
+    void C11summon(ull stones = S11_NEED_STONE);
     void C11summonPickServent(const int rank = 5, const int choice = 1, const int NP = 1);
     void C11showLuck(const int n = S11_NEED_STONE) const;
     void C11showPercent() const;

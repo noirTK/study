@@ -1,5 +1,11 @@
 #include "fgo.h"
 
+void fgo_simulator::setPU(const int rank, const int target)
+{
+    if(rank == 5) LS5PU = (target == 1) ? 0.7 : 0.8;
+    if(rank == 4) LS4PU = (target == 1) ? 1.5 : 2.4;
+}
+
 void fgo_simulator::C11summon(unsigned long long stones)
 {
     srand(time(NULL));
@@ -31,7 +37,7 @@ void fgo_simulator::C11summon(unsigned long long stones)
         std::fill(L5CEL, L5CEL+LCE5, 0);
         std::fill(L4CEL, L4CEL+LCE4, 0);
         std::fill(L3CEL, L3CEL+LCE3, 0);
-
+        
         while(stone >= S11_NEED_STONE)
         {
             // 연차 하면 4성 이상의 서번트 혹은 예장이 1개 확정
