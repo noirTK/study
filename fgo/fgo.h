@@ -1,5 +1,7 @@
 /*
     Since : 2020. 07. 20.
+    Lastest : 2020. 07. 21.
+    
     PROJECT. FGO PICKUP SIMULATOR
     FGO 가차 데이터를 분석하기 위해 만든 헤더파일.
 
@@ -37,12 +39,12 @@
     LCE3PU : 전체에서 픽업 확률 업 3성 예장을 픽업할 확률 (소수점2, %단위)
 
     void C11summon(unsigned long long stones) : stones 개의 성정석을 돌렸을 때의 연차시뮬
-    void C11summonPickServent(const int rank, const int choice, const int NP) : rank = 3성, 4성, 5성 / choice = 확률업 대상 서번트 LS5, LS4, LS3개 중 하나 (choice = 1 ~ LS5,LS4,LS3) / NP : 뽑을 서번트 개수(보1 ~ 보5) 연차 시뮬
+    void C11summonPickServent(const bool isPUup, const int rank, const int choice, const int NP) : isPUup = 픽업대상인지 아닌지 / rank = 3성, 4성, 5성 / choice = 확률업 대상 서번트 LS5, LS4, LS3개 중 하나 (choice = 1 ~ LS5,LS4,LS3) / NP : 뽑을 서번트 개수(보1 ~ 보5) 연차 시뮬
     void C11showLuck(const int n) const; n개의 성정석을 넣었을 떄 C11summonPickServent의 확률을 확인할 수 있다. (C11summonPickServent 호출 후 사용)
     void C11showPercent() const; C11summonPickServent를 만족하는 10~99% 각 확률당 필요한 성정석 개수를 확인할 수 있다. (C11summonPickServent 호출 후 사용)
     
     void summon(unsigned long long stones); : stones 개의 성정석을 돌렸을 때의 단차확률
-    void summonPickServent(const int rank, const int choice, const int NP);  rank = 3성, 4성, 5성 / choice = 확률업 대상 서번트 LS5, LS4, LS3개 중 하나 (choice = 1 ~ LS5,LS4,LS3) / NP : 뽑을 서번트 개수(보1 ~ 보5) 단차 시뮬
+    void summonPickServent(const bool isPUup, const int rank, const int choice, const int NP); isPUup = 픽업대상인지 아닌지 /  rank = 3성, 4성, 5성 / choice = 확률업 대상 서번트 LS5, LS4, LS3개 중 하나 (choice = 1 ~ LS5,LS4,LS3) / NP : 뽑을 서번트 개수(보1 ~ 보5) 단차 시뮬
     void showLuck(const int n) const; n개의 성정석을 넣었을 떄 summonPickServent의 확률을 확인할 수 있다. (summonPickServent 호출 후 사용)
     void showPercent() const; summonPickServent를  만족하는 10~99% 각 확률당 필요한 성정석 개수를 확인할 수 있다. (summonPickServent 호출 후 사용)
 
@@ -64,6 +66,7 @@ typedef unsigned long long * ullp;
 
 #include <ctime>
 #include <iostream>
+#include <cstdio>
 
 class fgo_simulator
 {
@@ -113,12 +116,12 @@ class fgo_simulator
     void setPU(const int rank = 5, const int choice = 1);
     
     void C11summon(ull stones = S11_NEED_STONE);
-    void C11summonPickServent(const int rank = 5, const int choice = 1, const int NP = 1);
+    void C11summonPickServent(const bool isPUup = true, const int rank = 5, const int choice = 1, const int NP = 1);
     void C11showLuck(const int n = S11_NEED_STONE) const;
     void C11showPercent() const;
 
     void summon(unsigned long long stones = NEED_STONE);
-    void summonPickServent(const int rank = 5, const int choice = 1, const int NP = 1);
+    void summonPickServent(const bool isPUup = true, const int rank = 5, const int choice = 1, const int NP = 1);
     void showLuck(const int n = NEED_STONE) const;
     void showPercent() const;
 

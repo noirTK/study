@@ -187,7 +187,7 @@ void fgo_simulator::C11summon(unsigned long long stones)
     }
 }
 
-void fgo_simulator::C11summonPickServent(const int rank, const int choice, const int NP)
+void fgo_simulator::C11summonPickServent(const bool isPUup, const int rank, const int choice, const int NP)
 {
     srand(time(NULL));
     totStone = 0;
@@ -221,12 +221,24 @@ void fgo_simulator::C11summonPickServent(const int rank, const int choice, const
 
         // 여기서 포인터로 스위칭
         const unsigned long long * pickS;
-        if(rank == 3) pickS = L3SL;
-        else if(rank == 4) pickS = L4SL;
-        else if(rank == 5) pickS = L5SL;
+        if(isPUup)
+        {
+            if(rank == 3) pickS = L3SL;
+            else if(rank == 4) pickS = L4SL;
+            else if(rank == 5) pickS = L5SL;
+        }
         // 여기서 포인터로 스위칭
 
-        while(pickS[choice-1] < NP)
+        bool isTrue;
+        if(isPUup) isTrue = pickS[choice-1] < NP;
+        else 
+        {
+            if(rank == 3) isTrue = S3 < NP;
+            else if(rank == 4) isTrue = S4 < NP;
+            else if(rank == 5) isTrue = S5 < NP;
+        }
+
+        while(isTrue)
         {
             // 연차 하면 4성 이상의 개념예장 혹은 서번트가 1개 확정
             int goldRoll = rand() % int(S5PU+S4PU+CE5PU+CE4PU) + 1;
@@ -355,6 +367,13 @@ void fgo_simulator::C11summonPickServent(const int rank, const int choice, const
                 }
             }
             stone += S11_NEED_STONE;
+            if(isPUup) isTrue = pickS[choice-1] < NP;
+            else 
+            {
+                if(rank == 3) isTrue = S3 < NP;
+                else if(rank == 4) isTrue = S4 < NP;
+                else if(rank == 5) isTrue = S5 < NP;
+            }
         }
         totCE5 += CE5;
         totCE4 += CE4;
@@ -377,74 +396,54 @@ void fgo_simulator::C11summonPickServent(const int rank, const int choice, const
 void fgo_simulator::C11showLuck(const int n) const
 {
     ull ans = 0;
-    for(int i = 1; i <= n/S11_NEED_STONE; ++i)
+    for(int i = S11_NEED_STONE; i <= n; i+= S11_NEED_STONE)
     {
-        ans += memory[i];
+        ans += memory[i/S11_NEED_STONE];
     }
-    std::cout.precision(2);
-    std::cout << n << "개의 성정석으로, 성공할 확률은" << double(ans)/times*100 << "% 입니다." << '\n';
+    printf("%d개의 성정석으로, 성공할 확률은 %.2f%%입니다.\n",n, double(ans) / times * 100.0);
 }
 
 void fgo_simulator::C11showPercent() const
 {
-    for(int percent = 10; percent < 100; percent+=10)
+    ull stone = 0;
+    for(int percent = 10; percent < 100; percent += (percent < 90) ? 10 : 1)
     {
         ull ans = 0;
-        int i;
-        for(i = 1; i < 100000; ++i)
+        int i = S11_NEED_STONE;
+        while(double(ans)*100 < percent * times)
         {
-            if(double(ans)/times > double(percent)/100) break;
-            ans += memory[i];
+            ans += memory[i/S11_NEED_STONE];
+            i += S11_NEED_STONE;
         }
-        std::cout << percent << "% 확률일 때 필요한 성정석 개수는 " << i*S11_NEED_STONE << "개입니다." << '\n';
-    }
-    for(int percent = 91; percent < 100; ++percent)
-    {
-        ull ans = 0;
-        int i;
-        for(i = 1; i < 100000; ++i)
-        {
-            if(double(ans)/times > double(percent)/100) break;
-            ans += memory[i];
-        }
-        std::cout << percent << "% 확률일 때 필요한 성정석 개수는 " << i*S11_NEED_STONE << "개입니다." << '\n';
+        i -= S11_NEED_STONE;
+        printf("%.1f%% 확률일 때 필요한 성정석 개수는 %d개입니다.\n", double(ans) / times * 100.0, i);
     }
 }
 
 void fgo_simulator::showLuck(const int n) const
 {
     ull ans = 0;
-    for(int i = 1; i <= n/NEED_STONE; ++i)
+    for(int i = NEED_STONE; i <= n; i+= NEED_STONE)
     {
-        ans += memory[i];
+        ans += memory[i/NEED_STONE];
     }
-    std::cout.precision(2);
-    std::cout << n << "개의 성정석으로, 성공할 확률은" << double(ans)/times*100 << "% 입니다." << '\n';
+    printf("%d개의 성정석으로, 성공할 확률은 %.2f%%입니다.\n", n, double(ans) / times * 100.0);
 }
 
 void fgo_simulator::showPercent() const
 {
-    for(int percent = 10; percent < 100; percent+=10)
+    ull stone = 0;
+    for(int percent = 10; percent < 100; percent += (percent < 90) ? 10 : 1)
     {
         ull ans = 0;
-        int i;
-        for(i = 1; i < 100000; ++i)
+        int i = NEED_STONE;
+        while(double(ans)*100 < percent * times)
         {
-            if(double(ans)/times > double(percent)/100) break;
-            ans += memory[i];
+            ans += memory[i/NEED_STONE];
+            i += NEED_STONE;
         }
-        std::cout << percent << "% 확률일 때 필요한 성정석 개수는 " << i*NEED_STONE << "개입니다." << '\n';
-    }
-    for(int percent = 91; percent < 100; ++percent)
-    {
-        unsigned long long ans = 0;
-        int i;
-        for(i = 1; i < 100000; ++i)
-        {
-            if(double(ans)/times > double(percent)/100) break;
-            ans += memory[i];
-        }
-        std::cout << percent << "% 확률일 때 필요한 성정석 개수는 " << i*NEED_STONE << "개입니다." << '\n';
+        i -= NEED_STONE;
+        printf("%.1f%% 확률일 때 필요한 성정석 개수는 %d개입니다.\n", double(ans) / times * 100.0, i);
     }
 }
 
@@ -557,7 +556,7 @@ void fgo_simulator::summon(unsigned long long stones)
     }
 }
 
-void fgo_simulator::summonPickServent(const int rank, const int choice, const int NP)
+void fgo_simulator::summonPickServent(const bool isPUup, const int rank, const int choice, const int NP)
 {
     srand(time(NULL));
     totStone = 0;
@@ -598,7 +597,16 @@ void fgo_simulator::summonPickServent(const int rank, const int choice, const in
         else if(rank == 5) pickS = L5SL;
         // 스위치 포인터
 
-        while(pickS[choice-1] < NP)
+        bool isTrue;
+        if(isPUup) isTrue = pickS[choice-1] < NP;
+        else 
+        {
+            if(rank == 3) isTrue = S3 < NP;
+            else if(rank == 4) isTrue = S4 < NP;
+            else if(rank == 5) isTrue = S5 < NP;
+        }
+
+        while(isTrue)
         {
             int roll = rand() % 100 + 1;
             if(roll >= 1 && roll < 1+S5PU)
@@ -656,6 +664,13 @@ void fgo_simulator::summonPickServent(const int rank, const int choice, const in
                 }
             }
             if((++freeSummon %= 11) != 10) stone += 3;
+            if(isPUup) isTrue = pickS[choice-1] < NP;
+            else 
+            {
+                if(rank == 3) isTrue = S3 < NP;
+                else if(rank == 4) isTrue = S4 < NP;
+                else if(rank == 5) isTrue = S5 < NP;
+            }
         }
         totCE5 += CE5;
         totCE4 += CE4;
@@ -678,16 +693,34 @@ void fgo_simulator::show() const
 {
     std::cout.precision(2);
     std::cout << "성정석 : " << totStone/times << " 테스트 케이스 : " << times << '\n';
-    std::cout << "5성 서번트 : " << double(totS5)/times << '\n';
-    std::cout << "4성 서번트 : " << double(totS4)/times << '\n';
-    std::cout << "3성 서번트 : " << double(totS3)/times << '\n';
-    std::cout << "5성 예장 : " << double(totCE5)/times << '\n';
-    std::cout << "4성 예장 : " << double(totCE4)/times << '\n';
-    std::cout << "3성 예장 : " << double(totCE3)/times << '\n';
-    for(int i = 0; i < LS5; ++i) std::cout << "픽업 5성 서번트" << i+1 << " : " << double(totLS5[i])/times << '\n';
-    for(int i = 0; i < LS4; ++i) std::cout << "픽업 4성 서번트" << i+1 << " : " << double(totLS4[i])/times << '\n';
-    for(int i = 0; i < LS3; ++i) std::cout << "픽업 3성 서번트" << i+1 << " : " << double(totLS3[i])/times << '\n';
-    for(int i = 0; i < LCE5; ++i) std::cout << "픽업 5성 예장" << i+1 << " : " << double(totLCE5[i])/times << '\n';
-    for(int i = 0; i < LCE4; ++i) std::cout << "픽업 4성 예장" << i+1 << " : " << double(totLCE4[i])/times << '\n';
-    for(int i = 0; i < LCE3; ++i) std::cout << "픽업 3성 예장" << i+1 << " : " << double(totLCE3[i])/times << '\n';
+    printf("5성 서번트 : %.1f\n", double(totS5) / times);
+    printf("4성 서번트 : %.1f\n", double(totS4) / times);
+    printf("3성 서번트 : %.1f\n", double(totS3) / times);
+    printf("5성 예장 : %.1f\n", double(totCE5) / times);
+    printf("4성 예장 : %.1f\n", double(totCE4) / times);
+    printf("3성 예장 : %.1f\n", double(totCE3) / times);
+    for(int i = 0; i < LS5; ++i) 
+    {
+        printf("픽업 5성 서번트%d : %.1f\n", i+1, double(totLS5[i]) / times);
+    }
+    for(int i = 0; i < LS4; ++i) 
+    {
+        printf("픽업 4성 서번트%d : %.1f\n", i+1, double(totLS4[i]) / times);
+    }
+    for(int i = 0; i < LS3; ++i)
+    {
+        printf("픽업 3성 서번트%d : %.1f\n", i+1, double(totLS3[i]) / times);
+    }
+    for(int i = 0; i < LCE5; ++i) 
+    {
+        printf("픽업 5성 예장%d : %.1f\n", i+1, double(totLCE5[i]) / times);
+    }
+    for(int i = 0; i < LCE4; ++i) 
+    {
+        printf("픽업 4성 예장%d : %.1f\n", i+1, double(totLCE4[i]) / times);
+    }
+    for(int i = 0; i < LCE3; ++i)
+    {
+        printf("픽업 3성 예장%d : %.1f\n", i+1, double(totLCE3[i]) / times);
+    }
 }
