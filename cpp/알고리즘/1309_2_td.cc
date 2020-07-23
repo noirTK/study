@@ -33,34 +33,35 @@ sol(n) = 2*s[n-2] + sol(n-1)이다. (n >= 2)
 위 문제의 답은 sol(n) + s[n-1]이 된다.
 ==========================================================================
 */
+
 #include <iostream>
 #include <array>
 
-using namespace std;
-array<int, 100001> d, s;
 const int mod = 9901;
+using namespace std;
+array<int, 1000001> d, s;
 
 int sol(const int n)
 {
-    if(n == 0) return 1;
-    if(n == 1) return 2;
+    if(n == 0) s[n] = d[n] = 1;
+    else if(n == 1) 
+    {
+        d[n] = 2;
+        s[n] = sol(0)+d[n];
+    }
     if(d[n] != -1) return d[n];
-    d[n] = 2*s[n-2] + sol(n-1);
+    d[n] = sol(n-1) + 2*s[n-2];
+    s[n] = s[n-1] + d[n];
     d[n] %= mod;
+    s[n] %= mod;
     return d[n];
 }
 
 int main()
 {
-    d.fill(-1);
     int n;
+    d.fill(-1);
     cin >> n;
-    s[0] = 1;
-    for(int i = 1; i <= n; ++i)
-    {
-        s[i] = sol(i) + s[i-1];
-        s[i] %= mod;
-    }
     cout << (sol(n) + s[n-1]) % mod << '\n';
     return 0;
 }

@@ -33,12 +33,13 @@ d[n] = 2*s[n-2] + d[n-1]이다. (n >= 2)
 위 문제의 답은 d[n] + s[n-1]이 된다.
 ==========================================================================
 */
+
 #include <iostream>
 #include <array>
 
 using namespace std;
-const int mod = 9901;
 array<int, 100001> d, s;
+const int mod = 9901;
 
 int main()
 {
@@ -46,13 +47,13 @@ int main()
     cin >> n;
     d[0] = s[0] = 1;
     d[1] = 2;
-    s[1] = d[1] + s[0];
-    for(int i = 2; i<= n; ++i)
+    s[1] = d[0] + d[1];
+    for(int i = 2; i <= n; ++i)
     {
-        d[i] = s[i-2]*2 + d[i-1];
-        s[i] = d[i] + s[i-1];
-        s[i] %= mod;
+        d[i] = 2*s[i-2]+d[i-1];
+        s[i] = s[i-1]+d[i];
         d[i] %= mod;
+        s[i] %= mod;
     }
     cout << (d[n] + s[n-1]) % mod << '\n';
     return 0;
