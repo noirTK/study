@@ -10,19 +10,18 @@ d[S][1] = 1 (0 <= S <= n)
 #include <array>
 
 using namespace std;
-const long long mod = 1000000000LL;
 array<array<long long, 201>, 201> d;
+const long long mod = 1000000000LL;
 
 int main()
 {
     int n, k;
     cin >> n >> k;
-    
     for(int i = 0; i <= n; ++i)
     {
         for(int j = 1; j <= k; ++j)
         {
-            if(j == 1) 
+            if(j == 1)
             {
                 d[i][j] = 1;
                 continue;
@@ -32,6 +31,7 @@ int main()
             {
                 d[i][j] += d[i-L][j-1];
                 d[i][j] %= mod;
+            }
         }
     }
     cout << d[n][k] << '\n';

@@ -10,22 +10,21 @@ sol(S,1) = 1 (0 <= S <= n)
 #include <array>
 
 using namespace std;
-const long long mod = 1000000000LL;
 array<array<long long, 201>, 201> d;
+const long long mod = 1000000000LL;
 
-long long sol(const int n, const int t)
+long long sol(const int n, const int k)
 {
-    if(t == 1) return 1;
-    if(d[n][t] != -1) return d[n][t];
-    d[n][t] = 0;
+    if(k == 1) return 1;
+    if(d[n][k] != -1) return d[n][k];
+    d[n][k] = 0;
     for(int L = 0; L <= n; ++L)
     {
-        d[n][t] += sol(n-L, t-1);
-        d[n][t] %= mod;
+        d[n][k] += sol(n-L,k-1);
+        d[n][k] %= mod;
     }
-    return d[n][t];
+    return d[n][k];
 }
-
 int main()
 {
     int n, k;
